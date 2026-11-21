@@ -98,6 +98,36 @@ public class PieceTableTests
     }
 
     [Fact]
+    public void EmptyEdits_DoNotChangeTheDocument()
+    {
+        PieceTable table = new ("content");
+
+        table.AddText(3, string.Empty);
+        table.DeleteText(3, 3);
+
+        Assert.Equal("content", table.GetText(0, table.Length));
+        Assert.Equal(7, table.Length);
+    }
+
+    [Fact]
+    public void EmptyDocument_SupportsInsertAndDeleteAllTransitions()
+    {
+        PieceTable table = new (string.Empty);
+
+        Assert.Equal(0, table.Length);
+        Assert.Equal(string.Empty, table.GetText(0, 0));
+        Assert.Equal(string.Empty, table.GetLine(0));
+
+        table.AddText(0, "text");
+        Assert.Equal("text", table.GetText(0, table.Length));
+
+        table.DeleteText(0, table.Length);
+        Assert.Equal(0, table.Length);
+        Assert.Equal(string.Empty, table.GetText(0, 0));
+        Assert.Equal(string.Empty, table.GetLine(0));
+    }
+
+    [Fact]
     public void Operations_RejectInvalidRanges()
     {
         PieceTable table = new ("abc");
