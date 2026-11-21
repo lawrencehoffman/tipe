@@ -1,0 +1,113 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.sln.ide
+*.vspscc
+*.vssscc
+*.pidb
+*.svclog
+*.scc
+
+# Visual Studio generated files
+Generated\ Files/
+_Chutzpah*
+*.cache
+*.opendb
+*.VC.db
+*.VC.VC.opendb
+
+# .NET build, publish, and test output
+artifacts/
+[Pp]ublish/
+[Pp]ackages/
+TestResults/
+*.coverage
+*.coveragexml
+*.testlog
+*.trx
+*.dotCover
+*.nupkg
+*.snupkg
+
+# NuGet
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+**/packages/*
+!**/packages/build/
+
+# Compiler and analyzer output
+*.pdb
+*.mdb
+*.ilk
+*.meta
+*.gpState
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# Microsoft Azure
+csx/
+*.build.csdef
+ecf/
+rcf/
+
+# SQL Server local database files
+*.mdf
+*.ldf
+*.ndf
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*.orig
+
+# Visual Studio Code workspace state
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# JetBrains Rider / ReSharper
+.idea/
+*.sln.iml
+*.DotSettings.user
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.ncrunch*
+*.crunch*.local.xml
+
+# OS metadata
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Miscellaneous generated files
+*.cachefile
+*.appx
+*.appxbundle
+*.appxupload
+*.msix
+*.msixbundle
+*.msixupload
