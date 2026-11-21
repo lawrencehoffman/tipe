@@ -51,8 +51,19 @@ public class PieceTableTests
         PieceTable table = new ("hello world");
         table.AddText(6, "brave ");
 
+        Assert.Equal(string.Empty, table.GetText(4, 4));
         Assert.Equal("world", table.GetText(12, 17));
         Assert.Equal("brave world", table.GetText(6, table.Length));
+
+        int lengthBeforeRead = table.Length;
+        Assert.Equal("hello brave world", table.GetText(0, table.Length));
+        Assert.Equal(lengthBeforeRead, table.Length);
+        Assert.Equal("hello brave world", table.GetText(0, table.Length));
+
+        table.AddText(6, "X");
+        table.DeleteText(5, 8);
+        Assert.Equal("hellorave world", table.GetText(0, table.Length));
+        Assert.Equal(15, table.Length);
     }
 
     [Fact]
@@ -80,6 +91,9 @@ public class PieceTableTests
         PieceTable table = new ("abc");
 
         Assert.Throws<ArgumentOutOfRangeException>(() => table.GetText(2, 1));
+        Assert.Throws<ArgumentOutOfRangeException>(() => table.GetText(-1, 0));
+        Assert.Throws<ArgumentOutOfRangeException>(() => table.GetText(0, table.Length + 1));
+        Assert.Throws<ArgumentOutOfRangeException>(() => table.GetText(table.Length + 1, table.Length + 1));
         Assert.Throws<ArgumentOutOfRangeException>(() => table.AddText(4, "x"));
         Assert.Throws<ArgumentOutOfRangeException>(() => table.DeleteText(-1, 1));
         Assert.Throws<ArgumentOutOfRangeException>(() => table.DeleteText(2, 1));
