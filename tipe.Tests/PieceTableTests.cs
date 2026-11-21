@@ -86,6 +86,18 @@ public class PieceTableTests
     }
 
     [Fact]
+    public void GetLine_ReflectsInsertedAndDeletedLineContent()
+    {
+        PieceTable table = new ("first\nthird");
+
+        table.AddText(6, "second\n");
+        Assert.Equal("second", table.GetLine(1));
+
+        table.DeleteText(6, 13);
+        Assert.Equal("third", table.GetLine(1));
+    }
+
+    [Fact]
     public void Operations_RejectInvalidRanges()
     {
         PieceTable table = new ("abc");
@@ -100,6 +112,7 @@ public class PieceTableTests
         Assert.Throws<ArgumentOutOfRangeException>(() => table.DeleteText(0, table.Length + 1));
         Assert.Throws<ArgumentOutOfRangeException>(() => table.DeleteText(table.Length + 1, table.Length + 1));
         Assert.Throws<ArgumentNullException>(() => table.AddText(0, null!));
+        Assert.Throws<ArgumentOutOfRangeException>(() => table.GetLine(-1));
         Assert.Throws<ArgumentOutOfRangeException>(() => table.GetLine(3));
 
         Assert.Equal("abc", table.GetText(0, table.Length));
