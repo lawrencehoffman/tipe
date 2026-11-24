@@ -13,9 +13,10 @@ Run the piece-table performance benchmarks in Release mode:
 dotnet run --project tipe.Benchmarks -c Release
 ```
 
-The benchmarks generate deterministic 2 MB, 10 MB, and 100 MB documents and
-measure loading, insertion at the beginning/middle/end, and deletion at the
-beginning/middle/end. Each edit benchmark starts with a fresh piece table.
+The benchmarks generate a deterministic 100-word document, wrap lines at 90
+characters, and measure adding 1, 10, 100, or 1,000 words, looking up a line,
+and generating the full document. Additions are prepared deterministically and
+the benchmark parameter controls the number of items in the add list.
 
 ## Project layout
 | File | Purpose |

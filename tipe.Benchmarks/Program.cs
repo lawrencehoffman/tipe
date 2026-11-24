@@ -4,49 +4,104 @@ using tipe;
 
 BenchmarkRunner.Run<PieceTableBenchmarks>();
 
+internal static class BenchmarkDocument
+{
+    public const int LineWidth = 90;
+    public const int BaseWordCount = 100;
+
+    public static string CreateBaseDocument()
+        => CreateWords(BaseWordCount, 0, 0, out _);
+
+    public static IReadOnlyList<string> CreateAdditions(int count, string baseDocument)
+    {
+        int lineLength = baseDocument[(baseDocument.LastIndexOf('\n') + 1)..].Length;
+        List<string> additions = new (count);
+
+        for (int index = 0; index < count; index++)
+        {
+            string word = $"added{index:D4}";
+            string separator = lineLength + word.Length + 1 <= LineWidth ? " " : "\n";
+            additions.Add(separator + word);
+            lineLength = separator == "\n" ? word.Length : lineLength + word.Length + 1;
+        }
+
+        return additions;
+    }
+
+    public static PieceTable CreatePreparedTable(string baseDocument, IReadOnlyList<string> additions)
+    {
+        PieceTable table = new (baseDocument);
+
+        foreach (string addition in additions)
+        {
+            table.AddText(table.Length, addition);
+        }
+
+        return table;
+    }
+
+    private static string CreateWords(int count, int start, int initialLineLength, out int lineLength)
+    {
+        System.Text.StringBuilder document = new ();
+        lineLength = initialLineLength;
+
+        for (int index = 0; index < count; index++)
+        {
+            string word = $"base{start + index:D4}";
+            string separator = lineLength == 0 ? string.Empty : lineLength + word.Length + 1 <= LineWidth ? " " : "\n";
+            document.Append(separator);
+            document.Append(word);
+            lineLength = separator == "\n" ? word.Length : lineLength + separator.Length + word.Length;
+        }
+
+        return document.ToString();
+    }
+}
+
 [MemoryDiagnoser]
 public class PieceTableBenchmarks
 {
-    private const int EditLength = 1_024;
-    private PieceTable _pieceTable = null!;
-    private string _document = string.Empty;
-    private string _insertText = string.Empty;
+    [Benchmark]
+    public void AddWords()
+    {
+        foreach (string addition in _additions)
+        {
+            _table.AddText(_table.Length, addition);
+        }
+    }
 
-    [Params(2_000_000, 10_000_000, 100_000_000)]
-    public int DocumentSize { get; set; }
+    [Benchmark]
+    public string LookupLine() => _table.GetLine(_lineToRead);
+
+    [Benchmark]
+    public string GenerateFullDocument() => _table.GetText(0, _table.Length);
+
+    [Params(1, 10, 100, 1_000)]
+    public int AddedWordCount { get; set; }
+
+    private PieceTable _table = null!;
+    private string _baseDocument = string.Empty;
+    private IReadOnlyList<string> _additions = null!;
+    private int _lineToRead;
 
     [GlobalSetup]
     public void GlobalSetup()
     {
-        _document = string.Create(DocumentSize, 'x', static (buffer, value) => buffer.Fill(value));
-        _insertText = string.Create(EditLength, 'y', static (buffer, value) => buffer.Fill(value));
+        _baseDocument = BenchmarkDocument.CreateBaseDocument();
+        _additions = BenchmarkDocument.CreateAdditions(AddedWordCount, _baseDocument);
+        _lineToRead = AddedWordCount / 10;
     }
 
-    [IterationSetup]
-    public void IterationSetup()
+    [IterationSetup(Target = nameof(AddWords))]
+    public void SetupAdd()
     {
-        _pieceTable = new PieceTable(_document);
+        _table = new PieceTable(_baseDocument);
     }
 
-    [Benchmark]
-    public PieceTable LoadDocument() => new (_document);
-
-    [Benchmark]
-    public void AddAtBeginning() => _pieceTable.AddText(0, _insertText);
-
-    [Benchmark]
-    public void AddAtMiddle() => _pieceTable.AddText(DocumentSize / 2, _insertText);
-
-    [Benchmark]
-    public void AddAtEnd() => _pieceTable.AddText(DocumentSize, _insertText);
-
-    [Benchmark]
-    public void DeleteAtBeginning() => _pieceTable.DeleteText(0, EditLength);
-
-    [Benchmark]
-    public void DeleteAtMiddle()
-        => _pieceTable.DeleteText((DocumentSize - EditLength) / 2, (DocumentSize + EditLength) / 2);
-
-    [Benchmark]
-    public void DeleteAtEnd() => _pieceTable.DeleteText(DocumentSize - EditLength, DocumentSize);
+    [IterationSetup(Target = nameof(LookupLine))]
+    [IterationSetup(Target = nameof(GenerateFullDocument))]
+    public void SetupRead()
+    {
+        _table = BenchmarkDocument.CreatePreparedTable(_baseDocument, _additions);
+    }
 }
