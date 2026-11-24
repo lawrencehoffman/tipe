@@ -99,8 +99,13 @@ public class PieceTableBenchmarks
     }
 
     [IterationSetup(Target = nameof(LookupLine))]
+    public void SetupLookup()
+    {
+        _table = BenchmarkDocument.CreatePreparedTable(_baseDocument, _additions);
+    }
+
     [IterationSetup(Target = nameof(GenerateFullDocument))]
-    public void SetupRead()
+    public void SetupGenerate()
     {
         _table = BenchmarkDocument.CreatePreparedTable(_baseDocument, _additions);
     }
