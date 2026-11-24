@@ -59,6 +59,7 @@ internal static class BenchmarkDocument
 }
 
 [MemoryDiagnoser]
+[SimpleJob(InvocationCount = 1, UnrollFactor = 1)]
 public class PieceTableBenchmarks
 {
     private PieceTableAddMetrics _lastAddMetrics;
@@ -109,7 +110,7 @@ public class PieceTableBenchmarks
         _lineToRead = AddedWordCount / 10;
     }
 
-    [InvocationSetup(Target = nameof(AddWords))]
+    [IterationSetup(Target = nameof(AddWords))]
     public void SetupAdd()
     {
         _table = new PieceTable(_baseDocument);
