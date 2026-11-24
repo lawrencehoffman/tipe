@@ -60,7 +60,8 @@ internal static class BenchmarkDocument
 }
 
 [MemoryDiagnoser]
-[SimpleJob(InvocationCount = 1, UnrollFactor = 1)]
+[SimpleJob]
+[InvocationCount(1)]
 public class PieceTableBenchmarks
 {
     private PieceTableAddMetrics _lastAddMetrics;

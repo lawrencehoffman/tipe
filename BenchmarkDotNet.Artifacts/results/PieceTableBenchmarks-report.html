@@ -2,7 +2,7 @@
 <html lang='en'>
 <head>
 <meta charset='utf-8' />
-<title>PieceTableBenchmarks-20261124-165616</title>
+<title>PieceTableBenchmarks-20261124-172354</title>
 
 <style type="text/css">
 	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
@@ -14,7 +14,7 @@
 <body>
 <pre><code>
 BenchmarkDotNet v0.15.6, Linux Ubuntu 24.04.5 LTS (Noble Numbat)
-AMD EPYC 9V74 3.68GHz, 1 CPU, 4 logical and 2 physical cores
+AMD EPYC 9V74 3.69GHz, 1 CPU, 4 logical and 2 physical cores
 .NET SDK 11.0.100
   [Host]     : .NET 10.0.15 (10.0.15, 10.0.1526.53008), X64 RyuJIT x86-64-v4
   Job-CNUJVU : .NET 10.0.15 (10.0.15, 10.0.1526.53008), X64 RyuJIT x86-64-v4
@@ -23,20 +23,23 @@ AMD EPYC 9V74 3.68GHz, 1 CPU, 4 logical and 2 physical cores
 </code></pre>
 
 <table>
-<thead><tr><th>Method        </th><th>AddedWordCount</th><th>Mean  </th><th>Error</th><th>StdDev</th><th>Median</th><th>Allocated</th>
+<thead><tr><th>Method        </th><th>AddedWordCount</th><th>Mean   </th><th>Error</th><th>StdDev</th><th>Median </th><th>Allocated</th>
 </tr>
-</thead><tbody><tr><td>AddWords</td><td>1</td><td>2.577 &mu;s</td><td>0.0518 &mu;s</td><td>0.1191 &mu;s</td><td>2.583 &mu;s</td><td>96 B</td>
-</tr><tr><td>LookupLine</td><td>1</td><td>2.871 &mu;s</td><td>0.1670 &mu;s</td><td>0.4924 &mu;s</td><td>2.700 &mu;s</td><td>744 B</td>
-</tr><tr><td>GenerateFullDocument</td><td>1</td><td>2.447 &mu;s</td><td>0.0562 &mu;s</td><td>0.1621 &mu;s</td><td>2.439 &mu;s</td><td>3736 B</td>
-</tr><tr><td>AddWords</td><td>10</td><td>4.652 &mu;s</td><td>0.0941 &mu;s</td><td>0.2026 &mu;s</td><td>4.652 &mu;s</td><td>768 B</td>
-</tr><tr><td>LookupLine</td><td>10</td><td>4.433 &mu;s</td><td>0.4752 &mu;s</td><td>1.3937 &mu;s</td><td>5.077 &mu;s</td><td>744 B</td>
-</tr><tr><td>GenerateFullDocument</td><td>10</td><td>12.661 &mu;s</td><td>2.1906 &mu;s</td><td>5.9596 &mu;s</td><td>15.688 &mu;s</td><td>4096 B</td>
-</tr><tr><td>AddWords</td><td>100</td><td>78.923 &mu;s</td><td>0.5455 &mu;s</td><td>0.4259 &mu;s</td><td>78.912 &mu;s</td><td>6288 B</td>
-</tr><tr><td>LookupLine</td><td>100</td><td>20.063 &mu;s</td><td>0.4796 &mu;s</td><td>1.3604 &mu;s</td><td>19.735 &mu;s</td><td>744 B</td>
-</tr><tr><td>GenerateFullDocument</td><td>100</td><td>15.808 &mu;s</td><td>1.9731 &mu;s</td><td>5.3679 &mu;s</td><td>17.855 &mu;s</td><td>7696 B</td>
-</tr><tr><td>AddWords</td><td>1000</td><td>6,701.605 &mu;s</td><td>35.7703 &mu;s</td><td>31.7094 &mu;s</td><td>6,701.409 &mu;s</td><td>49440 B</td>
-</tr><tr><td>LookupLine</td><td>1000</td><td>27.451 &mu;s</td><td>0.6523 &mu;s</td><td>1.8610 &mu;s</td><td>27.526 &mu;s</td><td>744 B</td>
-</tr><tr><td>GenerateFullDocument</td><td>1000</td><td>50.671 &mu;s</td><td>3.3040 &mu;s</td><td>8.8191 &mu;s</td><td>53.169 &mu;s</td><td>43696 B</td>
+</thead><tbody><tr><td>AddWords</td><td>1</td><td>3.490 &mu;s</td><td>0.0719 &mu;s</td><td>0.1259 &mu;s</td><td>3.485 &mu;s</td><td>96 B</td>
+</tr><tr><td>LookupLine</td><td>1</td><td>2.410 &mu;s</td><td>0.0879 &mu;s</td><td>0.2345 &mu;s</td><td>2.329 &mu;s</td><td>744 B</td>
+</tr><tr><td>GenerateFullDocument</td><td>1</td><td>2.330 &mu;s</td><td>0.0493 &mu;s</td><td>0.1093 &mu;s</td><td>2.324 &mu;s</td><td>3736 B</td>
+</tr><tr><td>AddWords</td><td>10</td><td>9.960 &mu;s</td><td>0.2006 &mu;s</td><td>0.3461 &mu;s</td><td>9.986 &mu;s</td><td>768 B</td>
+</tr><tr><td>LookupLine</td><td>10</td><td>5.130 &mu;s</td><td>0.2679 &mu;s</td><td>0.7901 &mu;s</td><td>5.322 &mu;s</td><td>744 B</td>
+</tr><tr><td>GenerateFullDocument</td><td>10</td><td>13.627 &mu;s</td><td>2.1820 &mu;s</td><td>6.1544 &mu;s</td><td>15.973 &mu;s</td><td>4096 B</td>
+</tr><tr><td>AddWords</td><td>100</td><td>104.826 &mu;s</td><td>1.5421 &mu;s</td><td>1.3670 &mu;s</td><td>104.447 &mu;s</td><td>6288 B</td>
+</tr><tr><td>LookupLine</td><td>100</td><td>15.009 &mu;s</td><td>0.9686 &mu;s</td><td>2.8256 &mu;s</td><td>13.610 &mu;s</td><td>744 B</td>
+</tr><tr><td>GenerateFullDocument</td><td>100</td><td>15.329 &mu;s</td><td>2.0963 &mu;s</td><td>5.8781 &mu;s</td><td>17.692 &mu;s</td><td>7696 B</td>
+</tr><tr><td>AddWords</td><td>1000</td><td>6,960.449 &mu;s</td><td>21.8334 &mu;s</td><td>19.3547 &mu;s</td><td>6,958.615 &mu;s</td><td>49440 B</td>
+</tr><tr><td>LookupLine</td><td>1000</td><td>29.917 &mu;s</td><td>0.5603 &mu;s</td><td>0.4679 &mu;s</td><td>29.960 &mu;s</td><td>744 B</td>
+</tr><tr><td>GenerateFullDocument</td><td>1000</td><td>49.982 &mu;s</td><td>3.1250 &mu;s</td><td>8.5547 &mu;s</td><td>52.795 &mu;s</td><td>43696 B</td>
+</tr><tr><td>AddWords</td><td>10000</td><td>30,199.680 &mu;s</td><td>167.4209 &mu;s</td><td>148.4143 &mu;s</td><td>30,140.170 &mu;s</td><td>786912 B</td>
+</tr><tr><td>LookupLine</td><td>10000</td><td>92.233 &mu;s</td><td>1.7662 &mu;s</td><td>1.7347 &mu;s</td><td>91.863 &mu;s</td><td>744 B</td>
+</tr><tr><td>GenerateFullDocument</td><td>10000</td><td>94.887 &mu;s</td><td>1.8698 &mu;s</td><td>2.4312 &mu;s</td><td>95.209 &mu;s</td><td>403696 B</td>
 </tr></tbody></table>
 </body>
 </html>
