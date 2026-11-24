@@ -1,5 +1,6 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using tipe;
 
 BenchmarkRunner.Run<PieceTableBenchmarks>();
 
