@@ -139,7 +139,6 @@ public class PieceTable
                 {
                     if (currentLine == lineNumber)
                     {
-                        RemoveCarriageReturn(line);
                         return line.ToString();
                     }
 
