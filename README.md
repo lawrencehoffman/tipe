@@ -7,10 +7,21 @@ dotnet run        # launch (Esc or the Quit button exits)
 dotnet build      # compile only
 ```
 
+Run the piece-table performance benchmarks in Release mode:
+
+```bash
+dotnet run --project tipe.Benchmarks -c Release
+```
+
+The benchmarks generate deterministic 2 MB, 10 MB, and 100 MB documents and
+measure loading, insertion at the beginning/middle/end, and deletion at the
+beginning/middle/end. Each edit benchmark starts with a fresh piece table.
+
 ## Project layout
 | File | Purpose |
 |---|---|
 | `Program.cs` | App entry point + the root `MainWindow` view. Add your views here. |
+| `tipe.Benchmarks/` | BenchmarkDotNet performance tests for the piece table. |
 | `AGENTS.md` | **Canonical Terminal.Gui v2 patterns + gotchas for AI agents and humans.** Start here. |
 | `CLAUDE.md` | Thin pointer to `AGENTS.md` for Claude / Claude Code. |
 | `.cursorrules` / `.windsurfrules` / `.aider.md` | Auto-loaded rules for Cursor / Windsurf / Aider — short banner that points at `AGENTS.md`. |
