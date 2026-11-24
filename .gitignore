@@ -33,6 +33,7 @@ _Chutzpah*
 
 # .NET build, publish, and test output
 artifacts/
+BenchmarkDotNet.Artifacts/
 [Pp]ublish/
 [Pp]ackages/
 TestResults/

@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\tipe.csproj" />
+    <ProjectReference Include="..\tipe.csproj" AdditionalProperties="BenchmarkBuild=true" />
   </ItemGroup>
 
 </Project>
