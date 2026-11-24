@@ -76,7 +76,7 @@ public class PieceTableBenchmarks
     [Benchmark]
     public string GenerateFullDocument() => _table.GetText(0, _table.Length);
 
-    [Params(1, 10, 100, 1_000)]
+    [Params(1, 10, 100, 1_000, 10_000)]
     public int AddedWordCount { get; set; }
 
     private PieceTable _table = null!;
