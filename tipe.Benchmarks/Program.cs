@@ -61,12 +61,29 @@ internal static class BenchmarkDocument
 [MemoryDiagnoser]
 public class PieceTableBenchmarks
 {
+    private PieceTableAddMetrics _lastAddMetrics;
+    private TimeSpan _locateInsertionPoint;
+    private TimeSpan _appendToAddBuffer;
+    private TimeSpan _splitAndInsertPieces;
+    private int _observedAdds;
+
     [Benchmark]
     public void AddWords()
     {
         foreach (string addition in _additions)
         {
             _table.AddText(_table.Length, addition);
+            PieceTableAddMetrics metrics = _table.LastAddMetrics;
+            _locateInsertionPoint += metrics.LocateInsertionPoint;
+            _appendToAddBuffer += metrics.AppendToAddBuffer;
+            _splitAndInsertPieces += metrics.SplitAndInsertPieces;
+            _lastAddMetrics = metrics;
+            _observedAdds++;
+        }
+
+        if (_observedAdds != AddedWordCount || _table.PieceCount != AddedWordCount + 1)
+        {
+            throw new InvalidOperationException("AddWords did not start from a fresh document.");
         }
     }
 
@@ -92,10 +109,27 @@ public class PieceTableBenchmarks
         _lineToRead = AddedWordCount / 10;
     }
 
-    [IterationSetup(Target = nameof(AddWords))]
+    [InvocationSetup(Target = nameof(AddWords))]
     public void SetupAdd()
     {
         _table = new PieceTable(_baseDocument);
+        _table.InstrumentationEnabled = true;
+        _locateInsertionPoint = TimeSpan.Zero;
+        _appendToAddBuffer = TimeSpan.Zero;
+        _splitAndInsertPieces = TimeSpan.Zero;
+        _observedAdds = 0;
+    }
+
+    [IterationCleanup(Target = nameof(AddWords))]
+    public void ReportAddInstrumentation()
+    {
+        Console.WriteLine(
+            $"AddWords instrumentation ({AddedWordCount} adds): " +
+            $"locate={_locateInsertionPoint.TotalNanoseconds:F0} ns, " +
+            $"append={_appendToAddBuffer.TotalNanoseconds:F0} ns, " +
+            $"split/insert={_splitAndInsertPieces.TotalNanoseconds:F0} ns, " +
+            "coalesce=0 ns, line-metadata=0 ns, " +
+            $"pieces={_lastAddMetrics.PieceCount}, adds={_observedAdds}");
     }
 
     [IterationSetup(Target = nameof(LookupLine))]

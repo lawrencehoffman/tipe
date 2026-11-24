@@ -1,4 +1,14 @@
+using System.Diagnostics;
+
 namespace tipe;
+
+public readonly record struct PieceTableAddMetrics(
+    TimeSpan LocateInsertionPoint,
+    TimeSpan AppendToAddBuffer,
+    TimeSpan SplitAndInsertPieces,
+    TimeSpan CoalescePieces,
+    TimeSpan UpdateLineMetadata,
+    int PieceCount);
 
 public class PieceTable
 {
@@ -29,6 +39,10 @@ public class PieceTable
     private readonly List<Piece> _pieces;
     private int _length;
 
+    public bool InstrumentationEnabled { get; set; }
+
+    public PieceTableAddMetrics LastAddMetrics { get; private set; }
+
     public PieceTable(string initialText)
     {
         ArgumentNullException.ThrowIfNull(initialText);
@@ -46,6 +60,8 @@ public class PieceTable
     /// </summary>
     public int Length => _length;
 
+    public int PieceCount => _pieces.Count;
+
     /// <summary>
     /// Inserts <paramref name="text"/> at <paramref name="start"/>.
     /// Offsets are UTF-16 character offsets and the insertion may occur at <see cref="Length"/>.
@@ -60,13 +76,39 @@ public class PieceTable
             return;
         }
 
+        long startTimestamp = InstrumentationEnabled ? Stopwatch.GetTimestamp() : 0;
         SplitAt(start);
+        TimeSpan splitPieces = InstrumentationEnabled
+            ? Stopwatch.GetElapsedTime(startTimestamp)
+            : TimeSpan.Zero;
 
+        startTimestamp = InstrumentationEnabled ? Stopwatch.GetTimestamp() : 0;
+        int insertionIndex = GetBoundaryIndex(start);
+        TimeSpan locateInsertionPoint = InstrumentationEnabled
+            ? Stopwatch.GetElapsedTime(startTimestamp)
+            : TimeSpan.Zero;
+
+        startTimestamp = InstrumentationEnabled ? Stopwatch.GetTimestamp() : 0;
         int addedBufferIndex = _addedBuffers.Count;
         _addedBuffers.Add(text);
-        int insertionIndex = GetBoundaryIndex(start);
+        TimeSpan appendToAddBuffer = InstrumentationEnabled
+            ? Stopwatch.GetElapsedTime(startTimestamp)
+            : TimeSpan.Zero;
+
+        startTimestamp = InstrumentationEnabled ? Stopwatch.GetTimestamp() : 0;
         _pieces.Insert(insertionIndex, new Piece(BufferType.Added, addedBufferIndex, 0, text.Length));
+        TimeSpan insertPiece = InstrumentationEnabled
+            ? Stopwatch.GetElapsedTime(startTimestamp)
+            : TimeSpan.Zero;
+
         _length += text.Length;
+        LastAddMetrics = new PieceTableAddMetrics(
+            locateInsertionPoint,
+            appendToAddBuffer,
+            splitPieces + insertPiece,
+            TimeSpan.Zero,
+            TimeSpan.Zero,
+            _pieces.Count);
     }
 
     /// <summary>

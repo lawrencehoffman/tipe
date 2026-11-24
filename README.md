@@ -16,7 +16,11 @@ dotnet run --project tipe.Benchmarks -c Release
 The benchmarks generate a deterministic 100-word document, wrap lines at 90
 characters, and measure adding 1, 10, 100, 1,000, or 10,000 words, looking up a line,
 and generating the full document. Additions are prepared deterministically and
-the benchmark parameter controls the number of items in the add list.
+the benchmark parameter controls the number of items in the add list. AddWords
+also reports instrumented time for insertion-point lookup, add-buffer append,
+piece splitting/insertion, coalescing, and line metadata, plus the final piece
+count. Coalescing and line metadata currently report zero because those
+structures do not yet exist.
 
 ## Project layout
 | File | Purpose |
