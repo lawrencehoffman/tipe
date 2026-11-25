@@ -24,9 +24,12 @@ public class PieceTable
         }
     }
 
+    private readonly record struct UndoEntry(int Start, int Length, Piece[]? RemovedPieces);
+
     private readonly string _originalText;
     private readonly List<string> _addedBuffers = new ();
     private readonly List<Piece> _pieces;
+    private readonly Stack<UndoEntry> _undoStack = new ();
     private int _length;
 
     public PieceTable(string initialText)
@@ -45,6 +48,11 @@ public class PieceTable
     /// Gets the current document length in UTF-16 character offsets.
     /// </summary>
     public int Length => _length;
+
+    /// <summary>
+    /// Gets whether there is an edit available to undo.
+    /// </summary>
+    public bool CanUndo => _undoStack.Count > 0;
 
     /// <summary>
     /// Inserts <paramref name="text"/> at <paramref name="start"/>.
@@ -66,6 +74,7 @@ public class PieceTable
         _addedBuffers.Add(text);
         _pieces.Insert(insertionIndex, new Piece(BufferType.Added, addedBufferIndex, 0, text.Length));
         _length += text.Length;
+        _undoStack.Push(new UndoEntry(start, text.Length, null));
     }
 
     /// <summary>
@@ -91,8 +100,40 @@ public class PieceTable
 
         int firstPiece = GetBoundaryIndex(start);
         int lastPiece = GetBoundaryIndex(end);
+        Piece[] removedPieces = new Piece[lastPiece - firstPiece];
+        _pieces.CopyTo(firstPiece, removedPieces, 0, removedPieces.Length);
         _pieces.RemoveRange(firstPiece, lastPiece - firstPiece);
         _length -= end - start;
+        _undoStack.Push(new UndoEntry(start, end - start, removedPieces));
+    }
+
+    /// <summary>
+    /// Undoes the most recent non-empty edit. Returns false if there is no edit to undo.
+    /// </summary>
+    public bool Undo()
+    {
+        if (!_undoStack.TryPop(out UndoEntry entry))
+        {
+            return false;
+        }
+
+        if (entry.RemovedPieces is null)
+        {
+            SplitAt(entry.Start);
+            SplitAt(entry.Start + entry.Length);
+            int firstPiece = GetBoundaryIndex(entry.Start);
+            int lastPiece = GetBoundaryIndex(entry.Start + entry.Length);
+            _pieces.RemoveRange(firstPiece, lastPiece - firstPiece);
+            _length -= entry.Length;
+        }
+        else
+        {
+            SplitAt(entry.Start);
+            _pieces.InsertRange(GetBoundaryIndex(entry.Start), entry.RemovedPieces);
+            _length += entry.Length;
+        }
+
+        return true;
     }
 
     /// <summary>
