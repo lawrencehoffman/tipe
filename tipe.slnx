@@ -1,5 +1,4 @@
 <Solution>
   <Project Path="tipe.csproj" />
   <Project Path="tipe.Tests/tipe.Tests.csproj" />
-  <Project Path="tipe.Benchmarks/tipe.Benchmarks.csproj" />
 </Solution>

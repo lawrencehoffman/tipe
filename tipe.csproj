@@ -8,17 +8,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(BenchmarkBuild)' == 'true'">
-    <DefineConstants>$(DefineConstants);BENCHMARK_BUILD</DefineConstants>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Terminal.Gui" Version="2.4.17" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="tipe.Tests/**/*.cs" />
-    <Compile Remove="tipe.Benchmarks/**/*.cs" />
   </ItemGroup>
 
 </Project>

@@ -7,26 +7,10 @@ dotnet run        # launch (Esc or the Quit button exits)
 dotnet build      # compile only
 ```
 
-Run the piece-table performance benchmarks in Release mode:
-
-```bash
-dotnet run --project tipe.Benchmarks -c Release
-```
-
-The benchmarks generate a deterministic 100-word document, wrap lines at 90
-characters, and measure adding 1, 10, 100, 1,000, or 10,000 words, looking up a line,
-and generating the full document. Additions are prepared deterministically and
-the benchmark parameter controls the number of items in the add list. AddWords
-also reports instrumented time for insertion-point lookup, add-buffer append,
-piece splitting/insertion, coalescing, and line metadata, plus the final piece
-count. Coalescing and line metadata currently report zero because those
-structures do not yet exist.
-
 ## Project layout
 | File | Purpose |
 |---|---|
 | `Program.cs` | App entry point + the root `MainWindow` view. Add your views here. |
-| `tipe.Benchmarks/` | BenchmarkDotNet performance tests for the piece table. |
 | `AGENTS.md` | **Canonical Terminal.Gui v2 patterns + gotchas for AI agents and humans.** Start here. |
 | `CLAUDE.md` | Thin pointer to `AGENTS.md` for Claude / Claude Code. |
 | `.cursorrules` / `.windsurfrules` / `.aider.md` | Auto-loaded rules for Cursor / Windsurf / Aider — short banner that points at `AGENTS.md`. |
