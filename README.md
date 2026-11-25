@@ -7,6 +7,13 @@ dotnet run        # launch (Esc or the Quit button exits)
 dotnet build      # compile only
 ```
 
+## Piece table
+`PieceTable` supports inserts and deletes at UTF-16 offsets. Each non-empty edit
+creates one undo entry; `CanUndo` indicates whether one is available, and
+`Undo()` reverses the most recent edit and returns `false` when history is empty.
+Empty or invalid edits do not create undo entries. Undo history is retained for
+the lifetime of the table; redo and grouped edits are not supported.
+
 ## Project layout
 | File | Purpose |
 |---|---|
